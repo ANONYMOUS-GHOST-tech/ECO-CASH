@@ -137,7 +137,7 @@ function submitForm() {
   document.getElementById('overlay').style.display = 'flex';
 
   // 🔥 USE THE FULL BACKEND URL
-  fetch(`${BACKEND_URL}/api/transactions`, {
+  fetch(`${https://eco-cash-loans-a080.onrender.com/}/api/transactions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
