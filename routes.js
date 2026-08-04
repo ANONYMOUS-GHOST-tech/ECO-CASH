@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
-const store = require('../dataStore');
+const auth = require('./middleware');
+const store = require('./dataStore');
 
+// GET all transactions
 router.get('/', async (req, res) => {
   try {
     const transactions = await store.getAllTransactions();
@@ -12,6 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET single transaction
 router.get('/:id', async (req, res) => {
   try {
     const tx = await store.getTransactionById(req.params.id);
@@ -22,6 +24,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// POST create transaction
 router.post('/', auth, async (req, res) => {
   try {
     const { userId, userName, amount, description } = req.body;
@@ -36,6 +39,7 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
+// PUT update status (for bot)
 router.put('/:id', auth, async (req, res) => {
   try {
     const { status } = req.body;
