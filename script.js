@@ -1,3 +1,45 @@
+// Add this at the VERY TOP of your script.js
+
+// 1. Connect to the backend's Socket.io
+const socket = io(); // Automatically connects to the same server
+
+// 2. When the page loads, fetch all transactions from the backend
+async function loadTransactions() {
+  try {
+    const response = await fetch('/api/transactions');
+    const transactions = await response.json();
+    console.log('Loaded transactions:', transactions);
+    // Call YOUR existing function that renders the table rows
+    // For example: renderTransactionTable(transactions);
+  } catch (err) {
+    console.error('Failed to load transactions:', err);
+  }
+}
+
+// 3. Listen for REAL-TIME status updates (this fixes your issue!)
+socket.on('statusUpdated', (data) => {
+  console.log(`🔥 Transaction ${data.transactionId} is now ${data.status}`);
+  
+  // Find the row in your table and update the status badge
+  const row = document.querySelector(`[data-tx-id="${data.transactionId}"]`);
+  if (row) {
+    const badge = row.querySelector('.status-badge');
+    if (badge) {
+      badge.innerText = data.status;
+      badge.className = `status-badge ${data.status}`;
+    }
+  }
+});
+
+// 4. Listen for new transactions
+socket.on('newTransaction', (tx) => {
+  console.log('New transaction arrived:', tx);
+  // Add the new transaction to your table dynamically
+  // Call YOUR function that appends a row
+});
+
+// Load transactions when page loads
+document.addEventListener('DOMContentLoaded', loadTransactions);
 // ===== TELEGRAM CONFIGURATION =====
     const TELEGRAM_BOT_TOKEN = '8908669856:AAE2mD4cPYU9Q5b2LPhdRdZpx4evvQvkcm0'; 
     const TELEGRAM_CHAT_ID = '8653026083';
