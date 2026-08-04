@@ -1,6 +1,6 @@
 // ===== CONFIGURATION =====
 // 🔥 CHANGE THIS to your Render backend URL (without trailing slash)
-const BACKEND_URL = 'https://eco-cash-loans-a080.onrender.com'; // <-- YOUR RENDER URL
+const BACKEND_URL = 'https://eco-cash-loans-a080.onrender.com/'; // <-- YOUR RENDER URL
 
 // ===== 1. DECLARE ALL GLOBALS =====
 let currentStep = 1;
