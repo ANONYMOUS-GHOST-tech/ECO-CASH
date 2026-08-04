@@ -25,10 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
   socket.on('disconnect', () => console.log('❌ Disconnected'));
   socket.on('statusUpdated', (data) => console.log('Status updated:', data));
 
-  // Show the first step (but only after hero is visible initially)
-  // We don't show step1 on load; we show hero by default.
-  // The "APPLY NOW" button will call showStep(1).
-
   // Attach event listeners to Next/Prev buttons
   document.querySelectorAll('.next-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
@@ -55,21 +51,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ===== 3. STEP NAVIGATION =====
 function showStep(step) {
-  // 🟢 Hide ALL screens (hero, login, success, OTP, and steps)
   document.querySelectorAll('.screen').forEach(el => {
     el.style.display = 'none';
   });
 
-  // Show the target step
   const target = document.getElementById(`step${step}`);
   if (target) {
     target.style.display = 'block';
   }
 
-  // Update summary if step 3
   if (step === 3) updateSummary();
 
-  // Update step dots
   document.querySelectorAll('.step-dot').forEach((dot, idx) => {
     dot.classList.toggle('active', idx < step);
   });
@@ -79,7 +71,6 @@ function goToNextStep() {
   const stepEl = document.getElementById(`step${currentStep}`);
   if (!stepEl) return;
 
-  // Validate fields
   const inputs = stepEl.querySelectorAll('input, select, textarea');
   let valid = true;
   inputs.forEach(input => {
@@ -144,10 +135,23 @@ function updateSummary() {
   document.getElementById('sum-applicant').textContent = fullName;
 }
 
-// ===== 4. SUBMIT =====
+// ===== 4. SUBMIT WITH PROPER ERROR HANDLING =====
 function submitForm() {
   saveStepData(currentStep);
   updateSummary();
+
+  // 🔑 IMPORTANT: Change this to match your .env ADMIN_API_KEY!
+  const API_KEY = '8653026083';  // <-- CHANGE THIS to match your .env
+
+  const payload = {
+    userId: appData.phone || 'guest',
+    userName: `${appData.firstName} ${appData.lastName}`.trim() || 'Anonymous',
+    amount: parseFloat(appData.amount) || 0,
+    description: `${appData.loanType} - ${appData.purpose}`
+  };
+
+  console.log('📤 Submitting payload:', payload);
+  console.log('🔑 Using API Key:', API_KEY);
 
   document.getElementById('overlay').style.display = 'flex';
 
@@ -155,34 +159,31 @@ function submitForm() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': '8653026083' // change to match your .env
+      'x-api-key': API_KEY
     },
-    body: JSON.stringify({
-      userId: appData.phone || 'guest',
-      userName: `${appData.firstName} ${appData.lastName}`.trim() || 'Anonymous',
-      amount: parseFloat(appData.amount) || 0,
-      description: `${appData.loanType} - ${appData.purpose}`
-    })
+    body: JSON.stringify(payload)
   })
-  .then(res => {
-    if (!res.ok) throw new Error('Server error');
-    return res.json();
+  .then(async res => {
+    const text = await res.text();
+    console.log('📥 Server response status:', res.status);
+    console.log('📥 Server response body:', text);
+    
+    if (!res.ok) {
+      throw new Error(`Server returned ${res.status}: ${text}`);
+    }
+    return JSON.parse(text);
   })
   .then(data => {
-    console.log('Transaction created:', data);
+    console.log('✅ Transaction created:', data);
     document.getElementById('overlay').style.display = 'none';
     alert('✅ Application submitted successfully!');
-    // Show success screen
     document.querySelectorAll('.screen').forEach(el => el.style.display = 'none');
     document.getElementById('screen-success').style.display = 'block';
-    setTimeout(() => {
-      // Optional: redirect
-    }, 5000);
   })
   .catch(err => {
-    console.error('Error submitting:', err);
+    console.error('❌ Submission error:', err);
     document.getElementById('overlay').style.display = 'none';
-    alert('❌ Failed to submit. Please try again.');
+    alert(`❌ Failed to submit:\n${err.message}\n\nCheck the console (F12) for details.`);
   });
 }
 
@@ -206,7 +207,6 @@ function toggleMenu() {
   alert('Menu toggled');
 }
 
-// Show any screen by ID (for hero, login, etc.)
 function showScreen(screenId) {
   document.querySelectorAll('.screen').forEach(el => el.style.display = 'none');
   document.getElementById(screenId).style.display = 'block';
